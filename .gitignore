@@ -1,7 +1,5 @@
 /.metadata/
-*/.project
 */*.iml
-*/.settings
 */.idea
 */build
 */bin
