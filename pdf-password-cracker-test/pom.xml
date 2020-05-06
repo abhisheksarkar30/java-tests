@@ -3,11 +3,9 @@
 	xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
 	<modelVersion>4.0.0</modelVersion>
 	<groupId>edu.abhi.pdftest</groupId>
-	<artifactId>pdf-test</artifactId>
+	<artifactId>pdf-password-cracker-test</artifactId>
 	<version>0.0.1-SNAPSHOT</version>
-	<name>pdf-test</name>
-
-
+	<name>pdf-password-cracker-test</name>
 
 	<build>
 		<plugins>
