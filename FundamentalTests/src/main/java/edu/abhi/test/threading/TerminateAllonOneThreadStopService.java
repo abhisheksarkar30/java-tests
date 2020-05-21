@@ -5,8 +5,12 @@ package edu.abhi.test.threading;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.concurrent.Callable;
 import java.util.concurrent.ExecutorService;
 import java.util.concurrent.Executors;
+
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 /**
  * An implementation of the use-case: one thread terminates complete jvm process
@@ -15,7 +19,7 @@ import java.util.concurrent.Executors;
  * @author abhishek sarkar
  *
  */
-public class Service {
+public class TerminateAllonOneThreadStopService {
 	
 	static ExecutorService executorService = null;
 
@@ -38,6 +42,29 @@ public class Service {
 	
 	public static void terminateAll() {
 		executorService.shutdownNow();
+	}
+
+}
+
+class Task implements Callable<String>{
+	
+	public static final Logger logger = LoggerFactory.getLogger(Task.class);
+
+	int w;
+	
+	public Task(int wait) {
+		w = wait;
+	}
+
+	@Override
+	public String call() throws Exception {
+		logger.info("Thread started with w = " + w);
+		for(int index = 0; index < w; index++)
+			Thread.sleep(1000);
+		logger.info("Thread ended with w = " + w);
+//		TerminateAllonOneThreadStopService.terminateAll();
+		System.exit(0);
+		return null;
 	}
 
 }

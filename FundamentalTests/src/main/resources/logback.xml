@@ -3,7 +3,7 @@
 	<property name="DEV_HOME" value="Logs" />
 	<appender name="STDOUT" class="ch.qos.logback.core.ConsoleAppender">
 		<layout class="ch.qos.logback.classic.PatternLayout">
-			<Pattern> %d{yyyy-MM-dd HH:mm:ss} %msg%n </Pattern>
+			<Pattern> %d{ISO8601} [%thread] [%-5level] %logger{36} - %msg%n </Pattern>
 		</layout>
 	</appender>
 	<appender name="FILE-AUDIT"
@@ -11,7 +11,7 @@
 		<file>${DEV_HOME}/Info.log</file>
 		<encoder class="ch.qos.logback.classic.encoder.PatternLayoutEncoder">
 			<Pattern>
-				%d{yyyy-MM-dd HH:mm:ss} %msg%n
+				%d{yyyy-MM-dd HH:mm:ss.SSS} [%thread] [%-5level] %logger{36} - %msg%n
 			</Pattern>
 		</encoder>
 
@@ -31,7 +31,7 @@
 		<file>${DEV_HOME}/Error.log</file>
 		<encoder class="ch.qos.logback.classic.encoder.PatternLayoutEncoder">
 			<Pattern>
-				%d{yyyy-MM-dd HH:mm:ss} %logger{36} - %msg%n
+				%d{yyyy-MM-dd HH:mm:ss.SSS} [%thread] [%-5level] %logger{36} - %msg%n
 			</Pattern>
 		</encoder>
 
