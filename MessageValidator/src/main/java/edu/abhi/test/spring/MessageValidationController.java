@@ -7,6 +7,7 @@ import java.io.IOException;
 import java.io.PrintWriter;
 import java.util.Scanner;
 
+import javax.servlet.ServletOutputStream;
 import javax.servlet.http.HttpServletResponse;
 
 import org.slf4j.Logger;
@@ -98,7 +99,7 @@ public class MessageValidationController {
 
 		File reportfile = new File(dir.getAbsolutePath() + File.separator + reportFileName);
 
-		try (PrintWriter out = response.getWriter();
+		try (ServletOutputStream out = response.getOutputStream();
 				FileInputStream fileInputStream = new FileInputStream(reportfile)) {
 
 			for (int i; (i = fileInputStream.read()) != -1; out.write(i));
