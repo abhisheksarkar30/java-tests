@@ -1,9 +1,7 @@
 package edu.abhi.test.spring;
 
-import java.io.BufferedOutputStream;
 import java.io.File;
 import java.io.FileInputStream;
-import java.io.FileOutputStream;
 import java.io.FileWriter;
 import java.io.IOException;
 import java.io.PrintWriter;
@@ -21,7 +19,8 @@ import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.multipart.MultipartFile;
 
 /**
- * Handles requests for the application file upload requests or just message upload for validation check.
+ * Handles requests for the application file upload requests or just message
+ * upload for validation check.
  * 
  * @author abhishek sarkar
  */
@@ -29,6 +28,10 @@ import org.springframework.web.multipart.MultipartFile;
 public class MessageValidationController {
 
 	private static final Logger logger = LoggerFactory.getLogger(MessageValidationController.class);
+
+	private static final String java8Path = System.getenv("JAVA8HOME") + "/bin";
+
+	private static final String validatorJarName = "E:/AUSTPC/SwiftValidator2019/Swift/SWIFTValidator-1.0-SNAPSHOT-jar-with-dependencies.jar";
 
 	/**
 	 * Upload single file using Spring Controller
@@ -39,21 +42,9 @@ public class MessageValidationController {
 		String name = file.getOriginalFilename();
 		if (!file.isEmpty()) {
 			try {
-				byte[] bytes = file.getBytes();
+				byte[] message = file.getBytes();
 
-				// Creating the directory to store file
-				String rootPath = System.getProperty("catalina.base");
-				File dir = new File(rootPath + File.separator + "tmp");
-				if (!dir.exists())
-					dir.mkdirs();
-
-				// Create the file on server
-				File inputFile = new File(dir.getAbsolutePath() + File.separator + name);
-				BufferedOutputStream stream = new BufferedOutputStream(new FileOutputStream(inputFile));
-				stream.write(bytes);
-				stream.close();
-
-				process(dir, inputFile, response);
+				process(name, new String(message), response);
 
 				return "You successfully uploaded file=" + name;
 			} catch (Exception e) {
@@ -65,43 +56,56 @@ public class MessageValidationController {
 		}
 	}
 
-	private void process(File dir, File inputFile, HttpServletResponse response) throws IOException {
+	private void process(String name, String message, HttpServletResponse response) throws IOException {
+
+		// Creating the directory to store file
+		String rootPath = System.getProperty("catalina.base");
+		File dir = new File(rootPath + File.separator + "tmp");
+		if (!dir.exists())
+			dir.mkdirs();
+
+		//Replacing block 1 value of header
+		String replaceString = message.substring(message.indexOf(":") + 1, message.indexOf("}"));
+		message = message.replace(replaceString, "F01NKSCHKH0AXXX1670335254");
+
+		// Create the file on server
+		File inputFile = new File(dir.getAbsolutePath() + File.separator + name);
+		try (FileWriter writer = new FileWriter(inputFile)) {
+			writer.append(message);
+			writer.flush();
+		}
+
 		logger.info("Server File Location=" + inputFile.getAbsolutePath());
 
 		Runtime rt = Runtime.getRuntime();
 
-		String command = "powershell -Command \"(gc \"" + inputFile.getAbsolutePath()
-				+ "\") -replace 'F01NRIFTIAUAU010000000000', 'F01NKSCHKH0AXXX1670335254' -replace 'F01BTFGAU2SAXXX0000000001', 'F01NKSCHKH0AXXX1670335254' "
-				+ "| Out-File -encoding ASCII \"" + inputFile.getAbsolutePath() + "\"\"";
-
-		executeCommand(rt, command);
-
-		command = "cmd.exe /c \"cd \"" + dir.getAbsolutePath() + "\" && " + "\"%JAVA8HOME%/bin/java\" -jar "
-				+ "E:/AUSTPC/SwiftValidator2019/Swift/SWIFTValidator-1.0-SNAPSHOT-jar-with-dependencies.jar "
-				+ inputFile.getAbsolutePath() + "\"";
+		String command = String.format("cmd.exe /c \"cd \"%s\" && \"%s/java\" -jar \"%s\" \"%s\"",
+				dir.getAbsolutePath(), java8Path, validatorJarName, inputFile.getAbsolutePath());
 
 		String outRes = executeCommand(rt, command);
 
-		String fileName = outRes.substring(outRes.indexOf("Name:") + 5, outRes.indexOf(".xlsx") + 5).trim()
+		String placeHolder = "Output Report File Name: ";
+
+		String reportFileName = outRes
+				.substring(outRes.indexOf(placeHolder) + placeHolder.length(), outRes.indexOf(".xlsx") + 5).trim()
 				.replace("\n", "");
 
-		System.out.println("File downloading = " + fileName);
+		System.out.println("File downloading = " + reportFileName);
 
-//		response.setContentType("text/plain");
+		// response.setContentType("text/plain");
 		response.setContentType("text/vnd.ms-excel");
-		PrintWriter out = response.getWriter();
-		response.setHeader("Content-Disposition", "attachment; filename=\"" + fileName + "\"");
+		response.setHeader("Content-Disposition", "attachment; filename=\"" + reportFileName + "\"");
 
-		File reportfile = new File(dir.getAbsolutePath() + File.separator + fileName);
-		FileInputStream fileInputStream = new FileInputStream(reportfile);
+		File reportfile = new File(dir.getAbsolutePath() + File.separator + reportFileName);
 
-		int i;
-		while ((i = fileInputStream.read()) != -1) {
-			out.write(i);
+		try (PrintWriter out = response.getWriter();
+				FileInputStream fileInputStream = new FileInputStream(reportfile)) {
+
+			for (int i; (i = fileInputStream.read()) != -1; out.write(i));
 		}
-		fileInputStream.close();
-		out.close();
-
+		
+		System.out.println("File downloaded successfully = " + reportFileName);
+		
 		inputFile.delete();
 		reportfile.delete();
 	}
@@ -109,24 +113,10 @@ public class MessageValidationController {
 	@RequestMapping(value = "/validate", method = RequestMethod.POST)
 	public @ResponseBody String uploadFileHandler(@RequestParam("message") String message,
 			HttpServletResponse response) {
-		String name = "sample.txt";
+
 		if (!message.isEmpty()) {
 			try {
-
-				// Creating the directory to store file
-				String rootPath = System.getProperty("catalina.base");
-				File dir = new File(rootPath + File.separator + "tmp");
-				if (!dir.exists())
-					dir.mkdirs();
-
-				// Create the file on server
-				File inputFile = new File(dir.getAbsolutePath() + File.separator + name);
-				FileWriter writer = new FileWriter(inputFile);
-				writer.append(message);
-				writer.flush();
-				writer.close();
-
-				process(dir, inputFile, response);
+				process("sample.txt", message, response);
 
 				return "You successfully uploaded message";
 			} catch (Exception e) {
