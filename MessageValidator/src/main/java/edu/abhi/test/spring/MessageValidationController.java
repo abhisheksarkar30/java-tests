@@ -29,10 +29,6 @@ public class MessageValidationController {
 
 	private static final Logger logger = LoggerFactory.getLogger(MessageValidationController.class);
 
-	private static final String java8Path = System.getenv("JAVA8HOME") + "/bin";
-
-	private static final String validatorJarName = "E:/AUSTPC/SwiftValidator2019/Swift/SWIFTValidator-1.0-SNAPSHOT-jar-with-dependencies.jar";
-
 	/**
 	 * Upload single file using Spring Controller
 	 */
@@ -64,9 +60,9 @@ public class MessageValidationController {
 		if (!dir.exists())
 			dir.mkdirs();
 
-		//Replacing block 1 value of header
-		String replaceString = message.substring(message.indexOf(":") + 1, message.indexOf("}"));
-		message = message.replace(replaceString, "F01NKSCHKH0AXXX1670335254");
+		//Replacing block 1 of header
+		String replaceString = message.substring(message.indexOf("{"), message.indexOf("}") + 1);
+		message = message.replace(replaceString, ResourceLoader.getResources().get("replaceFirstBlockWith"));
 
 		// Create the file on server
 		File inputFile = new File(dir.getAbsolutePath() + File.separator + name);
@@ -79,15 +75,16 @@ public class MessageValidationController {
 
 		Runtime rt = Runtime.getRuntime();
 
-		String command = String.format("cmd.exe /c \"cd \"%s\" && \"%s/java\" -jar \"%s\" \"%s\"",
-				dir.getAbsolutePath(), java8Path, validatorJarName, inputFile.getAbsolutePath());
+		String command = String.format("cmd.exe /c \"cd \"%s\" && \"%s/java\" -jar \"%s\" \"%s\"", dir.getAbsolutePath(), 
+				ResourceLoader.getResources().get("java8Path"), ResourceLoader.getResources().get("validatorJarPath"), inputFile.getAbsolutePath());
 
 		String outRes = executeCommand(rt, command);
 
-		String placeHolder = "Output Report File Name: ";
+		String placeHolder = ResourceLoader.getResources().get("reportFileNameStartsAfter");
+		String fileExtension = ResourceLoader.getResources().get("reportFileExtension");
 
 		String reportFileName = outRes
-				.substring(outRes.indexOf(placeHolder) + placeHolder.length(), outRes.indexOf(".xlsx") + 5).trim()
+				.substring(outRes.indexOf(placeHolder) + placeHolder.length(), outRes.indexOf(fileExtension) + fileExtension.length()).trim()
 				.replace("\n", "");
 
 		System.out.println("File downloading = " + reportFileName);
@@ -136,12 +133,12 @@ public class MessageValidationController {
 			Process exec = rt.exec(command);
 			outRes = "ErrorStream:----------------\n";
 			Scanner sc = new Scanner(exec.getErrorStream());
-			while (sc.hasNext()) {
-				outRes += sc.next() + "\n";
+			while (sc.hasNextLine()) {
+				outRes += sc.nextLine() + "\n";
 			}
 			sc.close();
 
-			outRes += "InputStream:----------------\n";
+			outRes += "\nInputStream:----------------\n";
 			sc = new Scanner(exec.getInputStream());
 			while (sc.hasNextLine()) {
 				outRes += sc.nextLine() + "\n";
