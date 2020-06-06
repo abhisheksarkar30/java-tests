@@ -62,7 +62,7 @@ public class MessageValidationController {
 
 		//Replacing block 1 of header
 		String replaceString = message.substring(message.indexOf("{"), message.indexOf("}") + 1);
-		message = message.replace(replaceString, ResourceLoader.getResources().get("replaceFirstBlockWith"));
+		message = message.replace(replaceString, ResourceLoader.getResource("replaceFirstBlockWith"));
 
 		// Create the file on server
 		File inputFile = new File(dir.getAbsolutePath() + File.separator + name);
@@ -76,12 +76,12 @@ public class MessageValidationController {
 		Runtime rt = Runtime.getRuntime();
 
 		String command = String.format("cmd.exe /c \"cd \"%s\" && \"%s/java\" -jar \"%s\" \"%s\"", dir.getAbsolutePath(), 
-				ResourceLoader.getResources().get("java8Path"), ResourceLoader.getResources().get("validatorJarPath"), inputFile.getAbsolutePath());
+				ResourceLoader.getResource("java8Path"), ResourceLoader.getResource("validatorJarPath"), inputFile.getAbsolutePath());
 
 		String outRes = executeCommand(rt, command);
 
-		String placeHolder = ResourceLoader.getResources().get("reportFileNameStartsAfter");
-		String fileExtension = ResourceLoader.getResources().get("reportFileExtension");
+		String placeHolder = ResourceLoader.getResource("reportFileNameStartsAfter");
+		String fileExtension = ResourceLoader.getResource("reportFileExtension");
 
 		String reportFileName = outRes
 				.substring(outRes.indexOf(placeHolder) + placeHolder.length(), outRes.indexOf(fileExtension) + fileExtension.length()).trim()

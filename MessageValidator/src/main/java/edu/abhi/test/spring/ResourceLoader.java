@@ -29,5 +29,9 @@ public class ResourceLoader {
 	public static Map<String, String> getResources() {
 		return resources;
 	}
+	
+	public static String getResource(String key) {
+		return resources.get(key);
+	}
 
 }
