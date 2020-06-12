@@ -10,11 +10,21 @@
 	<!-- Root Context: defines shared resources visible to all other web components -->
 
 	<util:map id="resources" map-class="java.util.HashMap" key-type="java.lang.String" value-type="java.lang.String">
+		<!-- For Windows -->
 		<entry key="validatorJarPath" value="E:/AUSTPC/SwiftValidator2019/Swift/SWIFTValidator-1.0-SNAPSHOT-jar-with-dependencies.jar" />
 		<entry key="reportFileNameStartsAfter" value="Output Report File Name: " />
 		<entry key="reportFileExtension" value=".xlsx" />
 		<entry key="replaceFirstBlockWith" value="{1:F01NKSCHKH0AXXX1670335254}" />
 		<entry key="java8Path" value="%JAVA8HOME%/bin" />
+		
+		<!-- For Linux -->
+		<!-- 
+		<entry key="validatorJarPath" value="/usr/share/tomcat/SWIFTValidator.jar" />
+		<entry key="reportFileNameStartsAfter" value="Output Report File Name: " />
+		<entry key="reportFileExtension" value=".xlsx" />
+		<entry key="replaceFirstBlockWith" value="{1:F01NKSCHKH0AXXX1670335254}" />
+		<entry key="java8Path" value="/usr/lib/jvm/java-1.8.0-openjdk-1.8.0.252.b09-2.amzn2.0.1.x86_64/jre/bin" />
+		-->
 	</util:map>
 
 </beans>

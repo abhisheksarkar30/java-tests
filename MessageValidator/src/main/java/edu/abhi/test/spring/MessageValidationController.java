@@ -44,7 +44,7 @@ public class MessageValidationController {
 
 				return "You successfully uploaded file=" + name;
 			} catch (Exception e) {
-				e.printStackTrace(System.out);
+				logger.error(e.getMessage(), e);
 				return "You failed to upload " + name + " => " + e.getMessage();
 			}
 		} else {
@@ -75,36 +75,39 @@ public class MessageValidationController {
 
 		Runtime rt = Runtime.getRuntime();
 
-		String command = String.format("cmd.exe /c \"cd \"%s\" && \"%s/java\" -jar \"%s\" \"%s\"", dir.getAbsolutePath(), 
+		String command = String.format("cd \"%s\" && \"%s/java\" -jar \"%s\" \"%s\"", dir.getAbsolutePath(), 
 				ResourceLoader.getResource("java8Path"), ResourceLoader.getResource("validatorJarPath"), inputFile.getAbsolutePath());
-
-		String outRes = executeCommand(rt, command);
-
+		
+		String outRes = System.getProperty("os.name").toLowerCase().startsWith("windows") ? 
+				executeCommand(rt, new String[] {"cmd.exe", "/c", command}) : executeCommand(rt, new String[] {"sh", "-c", command});
+		
 		String placeHolder = ResourceLoader.getResource("reportFileNameStartsAfter");
 		String fileExtension = ResourceLoader.getResource("reportFileExtension");
+		
+		if(outRes.contains(placeHolder)) {
+			String reportFileName = outRes.substring(outRes.indexOf(placeHolder) + placeHolder.length(), 
+					outRes.indexOf(fileExtension) + fileExtension.length()).trim().replace("\n", "");
 
-		String reportFileName = outRes
-				.substring(outRes.indexOf(placeHolder) + placeHolder.length(), outRes.indexOf(fileExtension) + fileExtension.length()).trim()
-				.replace("\n", "");
+			logger.info("File downloading = " + reportFileName);
 
-		System.out.println("File downloading = " + reportFileName);
+			// response.setContentType("text/plain");
+			response.setContentType("text/vnd.ms-excel");
+			response.setHeader("Content-Disposition", "attachment; filename=\"" + reportFileName + "\"");
 
-		// response.setContentType("text/plain");
-		response.setContentType("text/vnd.ms-excel");
-		response.setHeader("Content-Disposition", "attachment; filename=\"" + reportFileName + "\"");
+			File reportfile = new File(dir.getAbsolutePath() + File.separator + reportFileName);
 
-		File reportfile = new File(dir.getAbsolutePath() + File.separator + reportFileName);
+			try (ServletOutputStream out = response.getOutputStream();
+					FileInputStream fileInputStream = new FileInputStream(reportfile)) {
 
-		try (ServletOutputStream out = response.getOutputStream();
-				FileInputStream fileInputStream = new FileInputStream(reportfile)) {
+				for (int i; (i = fileInputStream.read()) != -1; out.write(i));
+			}
+			
+			logger.info("File downloaded successfully = " + reportFileName);
 
-			for (int i; (i = fileInputStream.read()) != -1; out.write(i));
+			reportfile.delete();
 		}
 		
-		System.out.println("File downloaded successfully = " + reportFileName);
-		
 		inputFile.delete();
-		reportfile.delete();
 	}
 
 	@RequestMapping(value = "/validate", method = RequestMethod.POST)
@@ -117,7 +120,7 @@ public class MessageValidationController {
 
 				return "You successfully uploaded message";
 			} catch (Exception e) {
-				e.printStackTrace(System.out);
+				logger.error(e.getMessage(), e);
 				return "You failed to upload messsage => " + e.getMessage();
 			}
 		} else {
@@ -125,11 +128,11 @@ public class MessageValidationController {
 		}
 	}
 
-	private String executeCommand(Runtime rt, String command) {
+	private String executeCommand(Runtime rt, String[] command) {
 		String outRes = "";
 
 		try {
-
+			logger.debug("Command = " + command[0] + " " + command[1] + " " + command[2]);
 			Process exec = rt.exec(command);
 			outRes = "ErrorStream:----------------\n";
 			Scanner sc = new Scanner(exec.getErrorStream());
@@ -145,10 +148,10 @@ public class MessageValidationController {
 			}
 			sc.close();
 
-			System.out.println(outRes);
+			logger.debug(outRes);
 			logger.info("After task within");
 		} catch (Exception e) {
-			e.printStackTrace();
+			logger.error(e.getMessage(), e);
 		}
 		return outRes;
 	}
