@@ -1,7 +1,7 @@
 /**
  * 
  */
-package edu.abhi.test.spring;
+package edu.abhi.test.jar;
 
 import java.util.HashMap;
 import java.util.Map;

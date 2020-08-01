@@ -9,7 +9,7 @@ This repository showcases some fundamentals of Java programming language, some b
 ## Supported Features
 Here are some notable features that is showcased in this repository:
  - Java Preference Framework: built-in & custom implementation
- - Activemq OpenWire over http instead of TCP
+ - ActiveMQ OpenWire over http instead of TCP
  - Java Performance Agent: for performance monitoring
- - MessageValidator: a bare webapp to validate supported messages by executing a separate validator jar from within the webapp, and downloads the generated report to the client machine, i.e. a java webapp executing a java jar inside.
+ - Web-Jar-Executor: a bare webapp focused to upload a file to validate supported messages by executing a separate validator jar from within the webapp, and downloads the generated report to the client machine, i.e. a java webapp executing a java jar inside.
  - FundamentalTests: Fundamentals of java e.g. generics, applet, clipboard, locking/synchronization, threading, etc.

@@ -31,6 +31,6 @@
 		<beans:property name="maxUploadSize" value="100000" />
 	</beans:bean>
 
-	<context:component-scan base-package="edu.abhi.test.spring" />
+	<context:component-scan base-package="edu.abhi.test.jar" />
 
 </beans:beans>

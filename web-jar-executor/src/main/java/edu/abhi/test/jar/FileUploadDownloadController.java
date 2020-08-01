@@ -1,4 +1,4 @@
-package edu.abhi.test.spring;
+package edu.abhi.test.jar;
 
 import java.io.File;
 import java.io.FileInputStream;
@@ -25,9 +25,9 @@ import org.springframework.web.multipart.MultipartFile;
  * @author abhishek sarkar
  */
 @Controller
-public class MessageValidationController {
+public class FileUploadDownloadController {
 
-	private static final Logger logger = LoggerFactory.getLogger(MessageValidationController.class);
+	private static final Logger logger = LoggerFactory.getLogger(FileUploadDownloadController.class);
 
 	/**
 	 * Upload single file using Spring Controller

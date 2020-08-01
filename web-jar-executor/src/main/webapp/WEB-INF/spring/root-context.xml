@@ -11,7 +11,7 @@
 
 	<util:map id="resources" map-class="java.util.HashMap" key-type="java.lang.String" value-type="java.lang.String">
 		<!-- For Windows -->
-		<entry key="validatorJarPath" value="E:/AUSTPC/SwiftValidator2019/Swift/SWIFTValidator-1.0-SNAPSHOT-jar-with-dependencies.jar" />
+		<entry key="validatorJarPath" value="E:/usr/share/tomcat/Validator.jar" />
 		<entry key="reportFileNameStartsAfter" value="Output Report File Name: " />
 		<entry key="reportFileExtension" value=".xlsx" />
 		<entry key="replaceFirstBlockWith" value="{1:F01NKSCHKH0AXXX1670335254}" />
@@ -19,7 +19,7 @@
 		
 		<!-- For Linux -->
 		<!-- 
-		<entry key="validatorJarPath" value="/usr/share/tomcat/SWIFTValidator.jar" />
+		<entry key="validatorJarPath" value="/usr/share/tomcat/Validator.jar" />
 		<entry key="reportFileNameStartsAfter" value="Output Report File Name: " />
 		<entry key="reportFileExtension" value=".xlsx" />
 		<entry key="replaceFirstBlockWith" value="{1:F01NKSCHKH0AXXX1670335254}" />
