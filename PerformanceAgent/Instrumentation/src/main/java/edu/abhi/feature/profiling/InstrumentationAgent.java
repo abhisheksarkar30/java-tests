@@ -8,6 +8,8 @@ import java.util.Properties;
 public class InstrumentationAgent {
 
 	private static String partialClassName = null;
+	
+	private static String[] partialClassNames;
 
 	static {
 		Properties props = new Properties();
@@ -17,6 +19,9 @@ public class InstrumentationAgent {
 			System.out.println("Unable to load config.properties \n" + e);
 		}
 		partialClassName = props.getProperty("partialClassName");
+		
+		if(partialClassName != null && !partialClassName.isEmpty())
+			partialClassNames = partialClassName.split(",");
 	}
 
 	public static void premain(String agentArgs, Instrumentation inst) throws Exception {
@@ -75,8 +80,12 @@ public class InstrumentationAgent {
 	}
 
 	public static boolean filterClasses(String className) {
+		
+		for(String name : partialClassNames)
+			if(className.contains(name) && !className.contains("profiling"))
+				return true;
 
-		return className.contains(partialClassName) && !className.contains("profiling");
+		return false;
 	}
 
 }
