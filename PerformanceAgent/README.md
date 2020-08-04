@@ -5,6 +5,12 @@
 This tool is very much beneficial for automated logging of JVM processes without code change.</br>
 It is basically a java agent designed for analysing performance of java processes.
 
+## Configuration
+Put proper configuration in config.properties file. A unique part of the complete cannonical name of each class to be logged, can be given there, comma-separated.
+
+## Prerequisites
+JAVA 7+
+
 ## Usage
 
 From within apps directory, please follow:- </br>
