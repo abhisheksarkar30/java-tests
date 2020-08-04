@@ -27,8 +27,9 @@ For addition of agent at startup of a java process
 ## Notes to follow
 
 1. If while hotlinking, failed to initialize/attach the agent, refer to target application logs.
-2. config.properties file to be kept at location from where the java app is executed for addition at startup.
-3. Please add '-XX:-UseSplitVerifier' when executing target app, if hotlinking fails due to following error: </br>
+2. If agent fails to attach/initialize, either rename the agent to retry with same jvm PID, or else restart the target app and then retry to attach.
+3. config.properties file to be kept at location from where the java app is executed for addition at startup.
+4. Please add '-XX:-UseSplitVerifier' when executing target app, if hotlinking fails due to following error: </br>
   Caused by: java.lang.VerifyError </br>
 at sun.instrument.InstrumentationImpl.retransformClasses0(Native Method) </br>
 at sun.instrument.InstrumentationImpl.retransformClasses(InstrumentationImpl.java:144) </br>
