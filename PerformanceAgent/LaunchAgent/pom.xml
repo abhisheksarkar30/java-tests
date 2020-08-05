@@ -21,11 +21,11 @@
 			<activation>
 				<activeByDefault>true</activeByDefault>
 				<file>
-					<exists>${JAVA7_HOME}/lib/tools.jar</exists>
+					<exists>${JAVA7HOME}/lib/tools.jar</exists>
 				</file>
 			</activation>
 			<properties>
-				<toolsjar>${JAVA7_HOME}/lib/tools.jar</toolsjar>
+				<toolsjar>${JAVA7HOME}/lib/tools.jar</toolsjar>
 			</properties>
 		</profile>
 	</profiles>
@@ -49,6 +49,7 @@
 				<groupId>org.apache.maven.plugins</groupId>
 				<artifactId>maven-jar-plugin</artifactId>
 				<configuration>
+					<finalName>LaunchAgent</finalName>
 					<archive>
 						<manifest>
 							<mainClass>${main.class}</mainClass>

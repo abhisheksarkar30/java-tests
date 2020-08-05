@@ -13,7 +13,6 @@
 		<agent.class>edu.abhi.feature.profiling.InstrumentationAgent</agent.class>
 	</properties>
 
-
 	<dependencies>
 		<!-- https://mvnrepository.com/artifact/javassist/javassist -->
 		<dependency>
@@ -22,7 +21,6 @@
 			<version>3.12.1.GA</version>
 		</dependency>
 	</dependencies>
-
 
 	<build>
 		<plugins>
@@ -38,6 +36,7 @@
 					</execution>
 				</executions>
 				<configuration>
+					<finalName>agent</finalName>
 					<archive>
 						<index>true</index>
 						<manifest>
@@ -53,6 +52,7 @@
 					<descriptorRefs>
 						<descriptorRef>jar-with-dependencies</descriptorRef>
 					</descriptorRefs>
+					<appendAssemblyId>false</appendAssemblyId>
 				</configuration>
 			</plugin>
 		</plugins>
