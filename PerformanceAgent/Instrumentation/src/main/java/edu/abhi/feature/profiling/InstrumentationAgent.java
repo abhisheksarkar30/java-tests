@@ -25,7 +25,7 @@ public class InstrumentationAgent {
 	}
 
 	public static void premain(String agentArgs, Instrumentation inst) throws Exception {
-		System.out.println("[Agent] In premain method");
+		System.out.println("[Agent] In premain method for static attach at startup");
 
 		if (partialClassName == null) {
 			throw new Exception("No class name found.");
@@ -35,7 +35,7 @@ public class InstrumentationAgent {
 	}
 
 	public static void agentmain(String agentArgs, Instrumentation inst) throws Exception {
-		System.out.println("[Agent] In agentmain method");
+		System.out.println("[Agent] In agentmain method for dynamic attach by hotlinking");
 
 		if (partialClassName == null) {
 			throw new Exception("No class name found.");

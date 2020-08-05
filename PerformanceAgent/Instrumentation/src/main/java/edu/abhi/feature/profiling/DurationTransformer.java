@@ -9,6 +9,7 @@ import javassist.CannotCompileException;
 import javassist.ClassPool;
 import javassist.CtClass;
 import javassist.CtMethod;
+import javassist.Modifier;
 import javassist.NotFoundException;
 
 public class DurationTransformer implements ClassFileTransformer {
@@ -28,6 +29,13 @@ public class DurationTransformer implements ClassFileTransformer {
 			CtClass ctClass = classPool.get(className.replaceAll("/", "\\."));
 			CtMethod[] methods = ctClass.getDeclaredMethods();
 			for (CtMethod method : methods) {
+				
+				//Avoiding failure due to native methods and abstract methods.
+				if(Modifier.isNative(method.getModifiers()) || Modifier.isAbstract(method.getModifiers())) {
+					System.out.println(method.getLongName() + " method skipped");
+					continue;
+				}
+				
 				method.addLocalVariable("startTime", CtClass.longType);
 				method.insertBefore("startTime = System.currentTimeMillis();");
 
