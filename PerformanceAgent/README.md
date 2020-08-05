@@ -36,8 +36,9 @@ For static addition of agent at startup of a java process: (uses premain method 
 2. If agent fails to attach/initialize, either rename the agent to retry with same jvm PID, or else restart the target app and then retry to attach.
 3. config.properties file to be kept at location from where the java app is executed for addition at startup.
 4. Please add '***-XX:-UseSplitVerifier***' when executing target app, if agent initialization fails due to following error: (if leads to error, follow #5) </br>
-  Caused by: java.lang.VerifyError </br>
+  **Caused by: java.lang.VerifyError </br>
 at sun.instrument.InstrumentationImpl.retransformClasses0(Native Method) </br>
-at sun.instrument.InstrumentationImpl.retransformClasses(InstrumentationImpl.java:144) </br>
+at sun.instrument.InstrumentationImpl.retransformClasses(InstrumentationImpl.java:144)** </br>
 5. Please add '***-noverify***' when executing target app, if target app loading fails due to below error on following #4: </br>
-Caused by: java.lang.ClassNotFoundException: oracle.security.pki.OraclePKIProvider
+	**Caused by: java.lang.ClassNotFoundException: oracle.security.pki.OraclePKIProvider** </br>
+Or, as a workaround, include oraclepki_121020.jar in the classpath.
