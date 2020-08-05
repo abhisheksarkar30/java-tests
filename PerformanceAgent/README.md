@@ -16,7 +16,7 @@ JAVA 7+
 From within apps directory, please follow:- </br>
 ### Hotlinking
 
-For realtime addition of agent to an active java process:
+For dynamic or realtime addition of agent to an active java process: (uses agentmain method for class transformation)
 1. Start the test.jar(test application to log) using below command:- </br>
 	***java -jar test.jar***
 	
@@ -26,7 +26,7 @@ P.S: Here test.jar can be replaced by any unqiue part of the target jvm process 
 	
 ### Attaching at Startup
 
-For addition of agent at startup of a java process
+For static addition of agent at startup of a java process: (uses premain method for class transformation)
 1. Sart the target application itself using below comand:- </br>
 	***java -javaagent:/full/path/to/agent.jar -jar test.jar*** </br>
   
