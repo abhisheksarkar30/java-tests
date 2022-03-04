@@ -1,0 +1,28 @@
+{
+  "udbString": "h1",
+  "udbInt": 1,
+  "udbIntW": 2,
+  "udbBool": true,
+  "udbBoolW": false,
+  "udbStringA": [
+    "h12",
+    "h13"
+  ],
+  "udbChildObj": {
+    "udcDouble": 13.0,
+    "udcDoubleW": 14.0,
+    "udcFloat": 15.0,
+    "udcFloatW": 16.0
+  },
+  "udbChildObjA": [{
+    "udcDouble": 113.0,
+    "udcDoubleW": 114.0,
+    "udcFloat": 115.0,
+    "udcFloatW": 116.0
+  },{
+    "udcDouble": 123.0,
+    "udcDoubleW": 124.0,
+    "udcFloat": 125.0,
+    "udcFloatW": 126.0
+  }]
+}
