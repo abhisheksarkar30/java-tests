@@ -4,6 +4,8 @@ import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 
+import java.util.List;
+
 @AllArgsConstructor
 @NoArgsConstructor
 @Getter
@@ -16,5 +18,5 @@ public class UserDefinedBaseClass {
     private Boolean udbBoolW;
     private String[] udbStringA;
     private UserDefinedChildClass udbChildObj;
-    private UserDefinedChildClass[] udbChildObjA;
+    private List<UserDefinedChildClass> udbChildObjA;
 }

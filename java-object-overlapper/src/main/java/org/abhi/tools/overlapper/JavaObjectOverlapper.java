@@ -1,6 +1,7 @@
 package org.abhi.tools.overlapper;
 
 import java.lang.reflect.Field;
+import java.util.Collection;
 
 public class JavaObjectOverlapper {
 
@@ -16,7 +17,7 @@ public class JavaObjectOverlapper {
                     field.set(top, baseVal);
                 } else if (topVal != null && baseVal != null) {
                     //If it's our code, then only compare else consider new one only.
-                    if (fieldType.getPackageName().startsWith("org.abhi.")) {
+                    if (!(fieldType.isArray() || fieldType.isEnum() || baseVal instanceof Collection) && fieldType.getPackageName().startsWith("org.abhi.")) {
                         overlap(baseVal, topVal, level+1);
                     }
                 }
